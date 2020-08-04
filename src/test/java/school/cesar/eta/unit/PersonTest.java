@@ -1,62 +1,93 @@
 package school.cesar.eta.unit;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class PersonTest {
+
+   private Person person = new Person();
+
+
     @Test
     public void getName_firstNameJonLastNameSnow_jonSnow() {
-        fail();
+        person.setName("Jon");
+        person.setLastName("Snow");
+        Assertions.assertEquals("Jon",person.getFirstName());
+        Assertions.assertEquals("Snow",person.getLastName());
+        Assertions.assertEquals("JonSnow",person.getName());
     }
 
     @Test
     public void getName_firstNameJonNoLastName_jon() {
-        fail();
+        person.setName("Jon");
+        Assertions.assertEquals("Jon",person.getFirstName());
+        Assertions.assertEquals("Jon",person.getName());
     }
 
     @Test
     public void getName_noFirstNameLastNameSnow_snow() {
-        fail();
+        person.setLastName("Snow");
+        Assertions.assertEquals("Snow",person.getLastName());
+        Assertions.assertEquals("Snow",person.getName());
     }
 
     @Test
     public void getName_noFirstNameNorLastName_throwsException() {
-        fail();
+        Assertions.assertThrows(RuntimeException.class, () -> person.getName());
     }
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        fail();
+        person.setBirthday(LocalDate.of(2020, 7, 19));
+        Assertions.assertNotEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
+        Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
+        Assertions.assertFalse(person.isBirthdayToday());
+
     }
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        fail();
+        person.setBirthday(LocalDate.of(2020, 8, 2));
+        Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
+        Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
+        Assertions.assertFalse(person.isBirthdayToday());
     }
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        fail();
+        person.setBirthday(LocalDate.of(2020, 8, 4));
+        Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
+        Assertions.assertEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
+        Assertions.assertTrue(person.isBirthdayToday());
     }
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        fail();
+        Person fistperson = new Person();
+        fistperson.setName("Paula");
+        fistperson.setLastName("Silva");
+        fistperson.setBirthday(LocalDate.of(1983, 8, 14));
+
+        fistperson.addToFamily(fistperson);
     }
 
     @Test
     public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
-        fail();
+
     }
 
     @Test
     public void isFamily_nonRelativePerson_false() {
-        fail();
+
+
+
     }
 
     @Test
     public void isFamily_relativePerson_true() {
-        fail();
+
     }
 }
