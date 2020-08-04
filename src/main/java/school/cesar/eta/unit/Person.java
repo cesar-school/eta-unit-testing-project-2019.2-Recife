@@ -23,6 +23,7 @@ public class Person {
     }
 
     public String getLastName() {
+
         return lastName;
     }
 
@@ -31,10 +32,12 @@ public class Person {
     }
 
     public LocalDate getBirthday() {
+
         return birthday;
     }
 
     public void setBirthday(LocalDate birthday) {
+
         this.birthday = birthday;
     }
 
