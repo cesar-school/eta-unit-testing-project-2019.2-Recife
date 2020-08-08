@@ -2,9 +2,7 @@ package school.cesar.eta.unit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class PersonTest {
 
@@ -41,7 +39,14 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        person.setBirthday(LocalDate.of(2020, 7, 19));
+        person = new Person() {
+            @Override
+            public LocalDate getNow() {
+                return LocalDate.now();
+            }
+        };
+
+        person.setBirthday(LocalDate.of(2020,7 ,19));
         Assertions.assertNotEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
         Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
         Assertions.assertFalse(person.isBirthdayToday());
@@ -50,7 +55,13 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        person.setBirthday(LocalDate.of(2020, 8, 2));
+        person = new Person() {
+            @Override
+            public LocalDate getNow() {
+                return LocalDate.now();
+            }
+        };
+        person.setBirthday(LocalDate.of(2020, 8, 7));
         Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
         Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
         Assertions.assertFalse(person.isBirthdayToday());
@@ -58,7 +69,13 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        person.setBirthday(LocalDate.of(2020, 8, 4));
+        person = new Person() {
+            @Override
+            public LocalDate getNow() {
+                return LocalDate.now();
+            }
+        };
+        person.setBirthday(LocalDate.now());
         Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
         Assertions.assertEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
         Assertions.assertTrue(person.isBirthdayToday());
@@ -66,12 +83,12 @@ public class PersonTest {
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        Person fistperson = new Person();
-        fistperson.setName("Paula");
-        fistperson.setLastName("Silva");
-        fistperson.setBirthday(LocalDate.of(1983, 8, 14));
+        Person firstPerson = new Person();
+        firstPerson.setName("Paula");
+        firstPerson.setLastName("Silva");
+        firstPerson.setBirthday(LocalDate.of(1983, 8, 14));
 
-        fistperson.addToFamily(fistperson);
+        firstPerson.addToFamily(firstPerson);
     }
 
     @Test
