@@ -1,6 +1,7 @@
 package school.cesar.eta.unit;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +27,17 @@ public class PersonTest {
 
     @Spy
     private List<Person> family;
+
+    @BeforeEach
+    public void setupTest() {
+        person = new Person() {
+            @Override
+            public LocalDate getNow() {
+                return LocalDate.now();
+            }
+        };
+
+    }
 
     @Test
     public void getName_firstNameJonLastNameSnow_jonSnow() {
@@ -57,13 +69,6 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        person = new Person() {
-            @Override
-            public LocalDate getNow() {
-                return LocalDate.now();
-            }
-        };
-
         person.setBirthday(LocalDate.of(2020,7 ,19));
         Assertions.assertNotEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
         Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
@@ -73,12 +78,6 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        person = new Person() {
-            @Override
-            public LocalDate getNow() {
-                return LocalDate.now();
-            }
-        };
         person.setBirthday(LocalDate.of(2020, 8, 7));
         Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
         Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
@@ -87,12 +86,6 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        person = new Person() {
-            @Override
-            public LocalDate getNow() {
-                return LocalDate.now();
-            }
-        };
         person.setBirthday(LocalDate.now());
         Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
         Assertions.assertEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
