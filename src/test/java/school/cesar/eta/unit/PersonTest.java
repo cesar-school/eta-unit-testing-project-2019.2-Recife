@@ -2,12 +2,30 @@ package school.cesar.eta.unit;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import java.time.LocalDate;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 public class PersonTest {
 
    private Person person = new Person();
 
+
+    @InjectMocks
+    private Person firstPerson;
+
+    @InjectMocks
+    private Person secondPerson;
+
+    @Spy
+    private List<Person> family;
 
     @Test
     public void getName_firstNameJonLastNameSnow_jonSnow() {
@@ -83,28 +101,25 @@ public class PersonTest {
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        Person firstPerson = new Person();
-        firstPerson.setName("Paula");
-        firstPerson.setLastName("Silva");
-        firstPerson.setBirthday(LocalDate.of(1983, 8, 14));
-
-        firstPerson.addToFamily(firstPerson);
+        firstPerson.addToFamily(secondPerson);
+        verify(family, times(1)).add(secondPerson);
     }
 
     @Test
     public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
-
+        firstPerson.addToFamily(secondPerson);
+        verify(family, times(1)).add(firstPerson);
     }
 
     @Test
     public void isFamily_nonRelativePerson_false() {
-
-
-
+        when(family.contains(null)).thenReturn(false);
+        Assertions.assertFalse(firstPerson.isFamily(null));
     }
 
     @Test
     public void isFamily_relativePerson_true() {
-
+        when(family.contains(null)).thenReturn(true);
+        Assertions.assertTrue(firstPerson.isFamily(null));
     }
 }
