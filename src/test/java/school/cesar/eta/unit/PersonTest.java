@@ -62,7 +62,7 @@ public class PersonTest {
         person.setBirthday(LocalDate.now());
         Assertions.assertTrue(person.isBirthdayToday());;
     }
-    }
+
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
@@ -76,7 +76,7 @@ public class PersonTest {
 
     @Test
     public void isFamily_nonRelativePerson_false() {
-        fail();
+       Assertions.assertFalse(person.isFamily(person));
     }
 
     @Test
