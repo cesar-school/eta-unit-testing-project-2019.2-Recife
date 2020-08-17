@@ -1,43 +1,67 @@
 package school.cesar.eta.unit;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class PersonTest {
+
+   @BeforeEach
+   public void setupTests(){
+       person = new Person();
+   }
+
+
+   private Person person;
+
+
+
     @Test
     public void getName_firstNameJonLastNameSnow_jonSnow() {
-        fail();
+        person.setName("Jon");
+        person.setLastName("Snow");
+        Assertions.assertEquals("JonSnow", person.getName());
     }
 
     @Test
     public void getName_firstNameJonNoLastName_jon() {
-        fail();
+        person.setName("Jon");
+        Assertions.assertEquals("Jon",person.getName());
     }
 
     @Test
     public void getName_noFirstNameLastNameSnow_snow() {
-        fail();
+        person.setLastName("Snow");
+        Assertions.assertEquals("Snow", person.getLastName());
     }
 
     @Test
     public void getName_noFirstNameNorLastName_throwsException() {
-        fail();
+        Assertions.assertThrows(RuntimeException.class, () -> person.getName());
     }
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        fail();
+        person.setBirthday(LocalDate.of(2019, 5, 23));
+        Assertions.assertFalse(person.isBirthdayToday());
+
     }
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        fail();
+        person.setBirthday(LocalDate.of(2019, 8, 23));
+        Assertions.assertFalse(person.isBirthdayToday());;
     }
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        fail();
+        person.setBirthday(LocalDate.now());
+        Assertions.assertTrue(person.isBirthdayToday());;
+    }
     }
 
     @Test
