@@ -3,14 +3,32 @@ package school.cesar.eta.unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import static org.mockito.Mockito.*;
+
+@ExtendWith({MockitoExtension.class})
 public class PersonTest {
 
     private Person person;
+
+    @InjectMocks
+    Person personOne = new Person();
+
+    @InjectMocks
+    Person personTwo = new Person();
+
+    @Mock
+    List<Person> family = new ArrayList<Person>();
 
     @BeforeEach
     public void  setupPerson(){
@@ -82,21 +100,26 @@ public class PersonTest {
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        fail();
+        Person somePerson = new Person();
+        personOne.addToFamily(somePerson);
+        verify(family,times(1)).add(somePerson);
     }
 
     @Test
     public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
-        fail();
+        personOne.addToFamily(personTwo);
+        verify(family,times(1)).add(personOne);
     }
 
     @Test
     public void isFamily_nonRelativePerson_false() {
-        fail();
+       when(family.contains(personTwo)).thenReturn(false);
+       Assertions.assertFalse(personOne.isFamily(personTwo));
     }
 
     @Test
     public void isFamily_relativePerson_true() {
-        fail();
+        when(family.contains(personTwo)).thenReturn(true);
+        Assertions.assertTrue(personOne.isFamily(personTwo));
     }
 }
