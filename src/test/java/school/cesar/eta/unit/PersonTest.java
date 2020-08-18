@@ -11,13 +11,18 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class PersonTest {
 
     private Person person;
+    private Person famMember;
+    private Person newMember;
 
     @BeforeEach
     public void setUp(){
         person = new Person(){
             @Override
             public LocalDate getNow() {
-                return LocalDate.of(1986, 5, 30);
+                return LocalDate.of(
+                        1986,
+                        5,
+                        30);
             }
         };
     }
@@ -73,21 +78,33 @@ public class PersonTest {
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        
+        famMember = new Person();
+        famMember.addToFamily(famMember);
+
+        Assertions.assertTrue(famMember.isFamily(famMember));
     }
 
     @Test
     public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
-        fail();
+        famMember = new Person();
+        newMember = new Person();
+        newMember.addToFamily(famMember);
+
+        Assertions.assertTrue(newMember.isFamily(famMember));
     }
 
     @Test
     public void isFamily_nonRelativePerson_false() {
-        fail();
+        famMember = new Person();
+
+        Assertions.assertFalse(person.isFamily(person));
     }
 
     @Test
     public void isFamily_relativePerson_true() {
-        fail();
+        newMember = new Person();
+        person.addToFamily(newMember);
+
+        Assertions.assertTrue(person.isFamily(newMember));
     }
 }
