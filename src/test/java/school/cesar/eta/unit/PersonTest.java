@@ -1,48 +1,79 @@
 package school.cesar.eta.unit;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class PersonTest {
+
+    private Person person;
+
+    @BeforeEach
+    public void setUp(){
+        person = new Person(){
+            @Override
+            public LocalDate getNow() {
+                return LocalDate.of(1986, 5, 30);
+            }
+        };
+    }
+
     @Test
     public void getName_firstNameJonLastNameSnow_jonSnow() {
-        fail();
+        person.setName("Jon");
+        person.setLastName("Snow");
+        Assertions.assertEquals("JonSnow", person.getName());
     }
 
     @Test
     public void getName_firstNameJonNoLastName_jon() {
-        fail();
+        person.setName("Jon");
+        Assertions.assertEquals("Jon", person.getName());
     }
 
     @Test
     public void getName_noFirstNameLastNameSnow_snow() {
-        fail();
+        person.setLastName("Snow");
+        Assertions.assertEquals("Snow", person.getName());
     }
 
     @Test
     public void getName_noFirstNameNorLastName_throwsException() {
-        fail();
+        Exception validacao = Assertions.assertThrows(RuntimeException.class, () -> {
+            person.getName();
+        });
+
+        String expectedMsg = "Name must be filled";
+        String actualMsg = validacao.getMessage();
+
+        Assertions.assertEquals(expectedMsg, actualMsg);
     }
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        fail();
+        person.setBirthday(LocalDate.of(1986,4,10));
+        Assertions.assertFalse(person.isBirthdayToday());
     }
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        fail();
+        person.setBirthday(LocalDate.of(1986, 5, 10));
+        Assertions.assertFalse(person.isBirthdayToday());
     }
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        fail();
+        person.setBirthday(LocalDate.of(1986, 5, 30));
+        Assertions.assertTrue(person.isBirthdayToday());
     }
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        fail();
+        
     }
 
     @Test
