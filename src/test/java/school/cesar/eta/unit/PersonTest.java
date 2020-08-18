@@ -17,6 +17,7 @@ public class PersonTest {
 
 
    private Person person;
+   private Person newMember;
 
 
 
@@ -66,13 +67,15 @@ public class PersonTest {
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        fail();
+        newMember = new Person();
+        newMember.addToFamily(newMember);
+                Assertions.assertTrue(newMember.isFamily(newMember));
     }
 
-    @Test
+    /*@Test
     public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
         fail();
-    }
+    }*/
 
     @Test
     public void isFamily_nonRelativePerson_false() {
@@ -81,6 +84,8 @@ public class PersonTest {
 
     @Test
     public void isFamily_relativePerson_true() {
-        fail();
+       newMember = new Person();
+       person.addToFamily(newMember);
+       Assertions.assertTrue(person.isFamily(newMember));
     }
 }
