@@ -1,62 +1,122 @@
 package school.cesar.eta.unit;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class PersonTest {
+
+    private Person person;
+
+    @BeforeEach
+    public void setupTest(){
+        person = new Person();
+    }
+
+    @InjectMocks
+    private Person personFamily1;
+
+    @InjectMocks
+    private Person personFamily2;
+
+    @Mock
+    private List<Person> family;
+
+    public LocalDate differentDayDate (){
+        LocalDate diffDate;
+        if (LocalDate.now().getDayOfMonth() > 27){
+            diffDate = LocalDate.now().minusDays(1);
+            return diffDate;
+        }
+        diffDate = LocalDate.now().plusDays(1);
+        return diffDate;
+    }
+
     @Test
     public void getName_firstNameJonLastNameSnow_jonSnow() {
-        fail();
+        person.setName("Jon");
+        person.setLastName("Snow");
+
+        Assertions.assertEquals("JonSnow",person.getName());
     }
 
     @Test
     public void getName_firstNameJonNoLastName_jon() {
-        fail();
+        person.setName("Jon");
+
+        Assertions.assertEquals("Jon",person.getName());
     }
 
     @Test
     public void getName_noFirstNameLastNameSnow_snow() {
-        fail();
+        person.setLastName("Snow");
+
+        Assertions.assertEquals("Snow",person.getName());
     }
 
     @Test
     public void getName_noFirstNameNorLastName_throwsException() {
-        fail();
+        Assertions.assertThrows(RuntimeException.class,() -> person.getName());
     }
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        fail();
+        person.setBirthday(LocalDate.now().plusMonths(1).plusDays(2));
+
+        Assertions.assertFalse(person.isBirthdayToday());
     }
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        fail();
+        person.setBirthday(differentDayDate());
+
+        Assertions.assertFalse(person.isBirthdayToday());
     }
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        fail();
+        person.setBirthday(LocalDate.now());
+
+        Assertions.assertTrue(person.isBirthdayToday());
     }
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        fail();
+        personFamily1.addToFamily(personFamily2);
+
+        verify(family, times(1)).add(personFamily2);
     }
 
     @Test
     public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
-        fail();
+        personFamily1.addToFamily(personFamily2);
+
+        verify(family, times(1)).add(personFamily1);
     }
 
     @Test
     public void isFamily_nonRelativePerson_false() {
-        fail();
+        when(family.contains(personFamily2)).thenReturn(false);
+
+        Assertions.assertFalse(personFamily1.isFamily(personFamily2));
     }
 
     @Test
     public void isFamily_relativePerson_true() {
-        fail();
+        when(family.contains(personFamily2)).thenReturn(true);
+
+        Assertions.assertTrue(personFamily1.isFamily(personFamily2));
     }
 }
