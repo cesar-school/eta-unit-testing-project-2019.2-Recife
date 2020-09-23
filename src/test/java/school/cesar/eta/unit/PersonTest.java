@@ -76,7 +76,7 @@ public class PersonTest {
         LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
         person.setBirthday(localDate);
         boolean actualResult = person.isBirthdayToday();
-        Assertions.assertTrue(actualResult);
+        Assertions.assertFalse(actualResult);
 
     }
 
@@ -89,7 +89,7 @@ public class PersonTest {
         LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
         person.setBirthday(localDate);
         boolean actualResult = person.isBirthdayToday();
-        Assertions.assertTrue(actualResult);
+        Assertions.assertFalse(actualResult);
     }
 
     @Test
