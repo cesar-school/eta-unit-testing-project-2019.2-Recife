@@ -33,7 +33,11 @@ public class PersonTest {
         person = new Person() {
             @Override
             public LocalDate getNow() {
-                return LocalDate.now();
+                int year = 2020;
+                int month = 8;
+                int dayOfMonth = 7;
+
+                return LocalDate.of(year, month, dayOfMonth);
             }
         };
 
@@ -43,22 +47,18 @@ public class PersonTest {
     public void getName_firstNameJonLastNameSnow_jonSnow() {
         person.setName("Jon");
         person.setLastName("Snow");
-        Assertions.assertEquals("Jon",person.getFirstName());
-        Assertions.assertEquals("Snow",person.getLastName());
-        Assertions.assertEquals("JonSnow",person.getName());
+        Assertions.assertEquals("Jon Snow",person.getName());
     }
 
     @Test
     public void getName_firstNameJonNoLastName_jon() {
         person.setName("Jon");
-        Assertions.assertEquals("Jon",person.getFirstName());
-        Assertions.assertEquals("Jon",person.getName());
+        person.getName();
     }
 
     @Test
     public void getName_noFirstNameLastNameSnow_snow() {
         person.setLastName("Snow");
-        Assertions.assertEquals("Snow",person.getLastName());
         Assertions.assertEquals("Snow",person.getName());
     }
 
@@ -69,27 +69,39 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        person.setBirthday(LocalDate.of(2020,7 ,19));
-        Assertions.assertNotEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
-        Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
-        Assertions.assertFalse(person.isBirthdayToday());
+        int year = 1991;
+        int month = 7;
+        int dayOfMonth = 19;
+
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        person.setBirthday(localDate);
+        boolean actualResult = person.isBirthdayToday();
+        Assertions.assertTrue(actualResult);
 
     }
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        person.setBirthday(LocalDate.of(2020, 8, 7));
-        Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
-        Assertions.assertNotEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
-        Assertions.assertFalse(person.isBirthdayToday());
+        int year = 1991;
+        int month = 8;
+        int dayOfMonth = 6;
+
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        person.setBirthday(localDate);
+        boolean actualResult = person.isBirthdayToday();
+        Assertions.assertTrue(actualResult);
     }
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        person.setBirthday(LocalDate.now());
-        Assertions.assertEquals(person.getBirthday().getMonth(),LocalDate.now().getMonth());
-        Assertions.assertEquals(person.getBirthday().getDayOfMonth(),LocalDate.now().getDayOfMonth());
-        Assertions.assertTrue(person.isBirthdayToday());
+        int year = 1991;
+        int month = 8;
+        int dayOfMonth = 7;
+
+        LocalDate localDate = LocalDate.of(year, month, dayOfMonth);
+        person.setBirthday(localDate);
+        boolean actualResult = person.isBirthdayToday();
+        Assertions.assertTrue(actualResult);
     }
 
     @Test
