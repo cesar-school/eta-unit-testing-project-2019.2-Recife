@@ -17,10 +17,6 @@ public class PersonTest {
 
 	Person person;
 	PersonMock personMock;
-	int sameMonth = LocalDate.now().getMonthValue();
-	int sameDay = LocalDate.now().getDayOfMonth();
-	int differentMonth = LocalDate.now().getMonthValue() + 1;
-	int differentDay = LocalDate.now().getDayOfMonth() + 1;
 
 	@InjectMocks
 	Person personFamily = new Person();
@@ -30,7 +26,12 @@ public class PersonTest {
 
 	@BeforeEach
 	public void createPerson() {
-		person = new Person();
+		person = new Person() {
+			@Override
+			public LocalDate getNow() {
+				return LocalDate.of(2020, 9, 30);
+			}
+		};
 	}
 
 	@Test
@@ -61,26 +62,26 @@ public class PersonTest {
 
 	@Test
 	public void isBirthdayToday_differentMonthAndDay_false() {
-		person.setBirthday(LocalDate.of(2020, differentMonth, differentDay));
+		person.setBirthday(LocalDate.of(2020, 12, 31));
 		Assertions.assertFalse(person.isBirthdayToday());
 	}
 
 	@Test
 	public void isBirthdayToday_sameMonthDifferentDay_false() {
-		person.setBirthday(LocalDate.of(2020, sameMonth, differentDay));
+		person.setBirthday(LocalDate.of(2020, 9, 29));
 		Assertions.assertFalse(person.isBirthdayToday());
 	}
 
 	@Test
 	public void isBirthdayToday_sameMonthAndDay_true() {
-		person.setBirthday(LocalDate.of(2020, sameMonth, sameDay));
+		person.setBirthday(LocalDate.of(2020, 9, 30));
 		Assertions.assertTrue(person.isBirthdayToday());
 	}
 
 	// teste extra para cobrir o metodo isBirthdayToday
 	@Test
 	public void isBirthdayToday_differentMonthSameDay_false() {
-		person.setBirthday(LocalDate.of(2020, differentMonth, sameDay));
+		person.setBirthday(LocalDate.of(2020, 8, 30));
 		Assertions.assertFalse(person.isBirthdayToday());
 	}
 
