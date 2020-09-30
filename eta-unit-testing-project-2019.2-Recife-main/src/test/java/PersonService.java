@@ -1,5 +1,8 @@
-package school.cesar.eta.unit;
 
+
+import java.time.LocalDate;
+
+import school.cesar.eta.unit.Person;
 
 public class PersonService implements PersonServiceInterface{
 
@@ -13,7 +16,12 @@ public class PersonService implements PersonServiceInterface{
 	public boolean isFamily(Person person) {
 		return true;
 	}
-	
+
+    @Override
+    public LocalDate getNow()
+    {  
+        return LocalDate.parse("2020-01-01");
+    }
 	
 
 }

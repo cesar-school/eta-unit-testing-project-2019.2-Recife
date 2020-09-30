@@ -1,4 +1,4 @@
-package school.cesar.eta.unit;
+
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -9,15 +9,16 @@ import java.util.Date;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import school.cesar.eta.unit.utils.FakePerson;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 //import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import school.cesar.eta.unit.Person;
+
 @ExtendWith(MockitoExtension.class)
+
 public class PersonTest {
 	
 	private Person person;
@@ -64,21 +65,33 @@ public class PersonTest {
     }
 
     @Test
-    public void isBirthdayToday_differentMonthAndDay_false() {
-       person.setBirthday(LocalDate.parse("2020-01-01"));
-       boolean result = person.isBirthdayToday();
-       Assertions.assertFalse(result);
+    public void isBirthdayToday_differentMonthAndDay_false() {     
+        PersonService service = new PersonService();
+        person.setBirthday(service.getNow());
+        boolean result = person.isBirthdayToday();
+        Assertions.assertFalse(result);
        
     }
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-    	Date date = new Date();
-    	LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    	int year = localDate.getYear();
-    	int month = localDate.getMonthValue();
-    	int day = localDate.getDayOfMonth();
-    	person.setBirthday(LocalDate.of(year, month, (day -2)));
+        person = new Person(){
+            
+            @Override
+            public LocalDate getNow()
+            {  
+                Date date = new Date();
+                LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                int year = localDate.getYear();
+                int month = localDate.getMonthValue();
+                int diferentDay = localDate.getDayOfMonth();
+                return LocalDate.of(year, month, diferentDay-5);
+            }
+            
+            
+        };
+
+        person.getNow();
         boolean result = person.isBirthdayToday();
         Assertions.assertFalse(result);
     }
