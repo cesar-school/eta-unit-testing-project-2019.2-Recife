@@ -3,21 +3,40 @@ package school.cesar.eta.unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.List;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
 
 public class PersonTest {
 
     private Person person;
-    private Person member;
-    private Person addMember;
+
+    @InjectMocks
+    private Person member1;
+
+    @InjectMocks
+    private Person member2;
+
+    @Spy
+    private List<Person> family;
 
     @BeforeEach
     public void setup() {
 
-        person = new Person();
+        person = new Person() {
+            @Override
+            public LocalDate getNow() {
+                return LocalDate.of(2020, 10, 05);
+            }
+        };
 
     }
 
@@ -68,7 +87,10 @@ public class PersonTest {
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
         //5- different Month And Day
-        person.setBirthday((LocalDate.of(1984, 4, 15)));
+        //Como o método getNow() está chamando LocalDate.now(), teste falhará se for executado no dia 08/11.
+
+        LocalDate birthday = LocalDate.of(1984, 4, 15);
+        person.setBirthday(birthday);
 
         //assertFalse
         Assertions.assertFalse(person.isBirthdayToday());
@@ -79,7 +101,10 @@ public class PersonTest {
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
         //6- same Month Different Day
-        person.setBirthday((LocalDate.of(1984, 8, 11)));
+        //Como o método getNow() está chamando LocalDate.now(), teste falhará se for executado no dia 08/11.
+
+        LocalDate birthday = LocalDate.of(1984, 8, 11);
+        person.setBirthday(birthday);
 
         //assertFalse
         Assertions.assertFalse(person.isBirthdayToday());
@@ -90,7 +115,12 @@ public class PersonTest {
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
         //7- same Month And Day
-        person.setBirthday((LocalDate.now()));
+        //A data retornada pelo LocalDate.now() é calculado no momento em que o método é chamado,
+        // então por frações de segundo o dia calculado pode ser diferente do calculado pela chamada
+        // do getNow() o que pode provocar intermitências no resultado do teste. Evite basear seus testes em variáveis do sistema!
+
+        LocalDate birthday = LocalDate.of(1984,10, 05);
+        person.setBirthday(birthday);
 
         //assertTrue
         Assertions.assertTrue(person.isBirthdayToday());
@@ -101,11 +131,12 @@ public class PersonTest {
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
         //8- family Has New Member
-        member = new Person();
-        member.addToFamily(member);
+        //Testes unitários devem isolar o cenário que está sendo testado, sendo assim não
+        //contar com a correta implementação do método isFamily().
 
-        //assertTrue
-        Assertions.assertTrue(member.isFamily(member));
+        member1.addToFamily(member2);
+
+        verify(family, times(1)).add(member2);
 
         //fail();
     }
@@ -113,19 +144,19 @@ public class PersonTest {
     @Test
     public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
         //9-person Added Also Has Its Family Updated
-        member = new Person();
-        addMember = new Person();
-        addMember.addToFamily(member);
+        //Testes unitários devem isolar o cenário que está sendo testado, sendo assim não
+        //deveria contar com a correta implementação do método isFamily().
 
-        //assertTrue
-        Assertions.assertTrue(addMember.isFamily(member));
+        member1.addToFamily(member2);
+
+        verify(family, times(1)).add(member1);
+
         //fail();
     }
 
     @Test
     public void isFamily_nonRelativePerson_false() {
         //10-non Relative Person
-        member = new Person();
 
         //assertFalse
         Assertions.assertFalse(person.isFamily(person));
@@ -136,11 +167,13 @@ public class PersonTest {
     @Test
     public void isFamily_relativePerson_true() {
         //11-relative Person
-        addMember = new Person();
-        person.addToFamily(addMember);
+        //Esta chamada acopla o sucesso do teste a correta implementação do método addToFamily().
+        // Testes unitários devem isolar o cenário que está sendo testado.
+
+        when(family.contains(null)).thenReturn(true);
 
         //assertTrue
-        Assertions.assertTrue(person.isFamily(addMember));
+        Assertions.assertTrue(member1.isFamily(null));
 
        //fail();
     }
