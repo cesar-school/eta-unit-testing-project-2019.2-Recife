@@ -3,10 +3,13 @@ package school.cesar.eta.unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Spy;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.*;
 
 public class PersonTest {
 
@@ -14,10 +17,15 @@ public class PersonTest {
    public void setupTests(){
        person = new Person();
    }
+    @InjectMocks
+    private Person pMock1;
+    @InjectMocks
+    private Person pMock2;
 
+    @Spy
+    private List<Person> family;
 
    private Person person;
-   private Person newMember;
 
 
 
@@ -47,29 +55,32 @@ public class PersonTest {
 
     @Test
     public void isBirthdayToday_differentMonthAndDay_false() {
-        person.setBirthday(LocalDate.of(2019, 5, 23));
+
+        LocalDate birthday = LocalDate.of(1994,10,2);
+        person.setBirthday(birthday);
         Assertions.assertFalse(person.isBirthdayToday());
 
     }
 
     @Test
     public void isBirthdayToday_sameMonthDifferentDay_false() {
-        person.setBirthday(LocalDate.of(2019, 8, 23));
-        Assertions.assertFalse(person.isBirthdayToday());;
+        LocalDate birthday = LocalDate.of(1994,9,7);
+        person.setBirthday(birthday);
+        Assertions.assertFalse(person.isBirthdayToday());
     }
 
     @Test
     public void isBirthdayToday_sameMonthAndDay_true() {
-        person.setBirthday(LocalDate.now());
-        Assertions.assertTrue(person.isBirthdayToday());;
+        LocalDate birthday = LocalDate.of(1994,9,2);
+        person.setBirthday(birthday);
+        Assertions.assertTrue(person.isBirthdayToday());
     }
 
 
     @Test
     public void addToFamily_somePerson_familyHasNewMember() {
-        newMember = new Person();
-        newMember.addToFamily(newMember);
-                Assertions.assertTrue(newMember.isFamily(newMember));
+        pMock1.addToFamily(pMock2);
+        verify(family, times(1)).add(pMock2);
     }
 
     /*@Test
@@ -84,8 +95,7 @@ public class PersonTest {
 
     @Test
     public void isFamily_relativePerson_true() {
-       newMember = new Person();
-       person.addToFamily(newMember);
-       Assertions.assertTrue(person.isFamily(newMember));
+        when(family.contains(null)).thenReturn(true);
+       Assertions.assertTrue(pMock1.isFamily(null));
     }
 }
