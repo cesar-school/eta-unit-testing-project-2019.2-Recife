@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.*;
 
 @ExtendWith({ MockitoExtension.class })
 public class PersonTest {
@@ -20,6 +21,9 @@ public class PersonTest {
 
 	@InjectMocks
 	Person personFamily = new Person();
+	
+	@InjectMocks
+	Person personFamily2 = new Person();
 
 	@Mock
 	List<Person> family = new ArrayList<Person>();
@@ -94,9 +98,8 @@ public class PersonTest {
 
 	@Test
 	public void addToFamily_somePerson_personAddedAlsoHasItsFamilyUpdated() {
-		personMock = new PersonMock();
-		personMock.addToFamily(personMock);
-		Assertions.assertTrue(personMock.family.contains(personMock));
+		personFamily.addToFamily(personFamily2);
+        verify(family, times(1)).add(personFamily);
 	}
 
 	@Test
