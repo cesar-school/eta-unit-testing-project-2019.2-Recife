@@ -15,7 +15,13 @@ public class PersonTest {
 
    @BeforeEach
    public void setupTests(){
-       person = new Person();
+
+       person = new Person(){
+           @Override
+           public LocalDate getNow() {
+               return LocalDate.of(2020, 10, 28);
+           }
+       };
    }
     @InjectMocks
     private Person pMock1;
