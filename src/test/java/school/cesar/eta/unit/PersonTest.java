@@ -110,8 +110,7 @@ public class PersonTest {
 
 	@Test
 	public void isFamily_relativePerson_true() {
-		Person personRelative = new Person();
-		person.addToFamily(personRelative);
-		Assertions.assertTrue(person.isFamily(personRelative));
+		when(family.contains(personFamily2)).thenReturn(true);
+        Assertions.assertTrue(personFamily.isFamily(personFamily2));
 	}
 }
